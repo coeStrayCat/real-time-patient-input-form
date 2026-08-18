@@ -1,49 +1,37 @@
-import Label from "@/components/atoms/Label";
 import Input from "@/components/atoms/Input";
 import Select from "@/components/atoms/Select";
-import ErrorText from "@/components/atoms/ErrorText";
+import FormField from "@/components/molecules/FormField";
 
 export default function ShowcasePage() {
   return (
     <div className="mx-auto max-w-2xl space-y-10 p-8 ">
       <div>
-        <h1 className="text-xl font-bold">Atom Showcase</h1>
+        <h1 className="text-xl font-bold">Component Showcase</h1>
         <p className="mt-1 text-sm text-zinc-500">
-          Preview of components/atoms/* 
+          Preview of components/atoms/* and components/molecules/*
         </p>
       </div>
 
-      <section className="space-y-2">
-        <Label htmlFor="firstName" required>
-          First Name
-        </Label>
-        <Input id="firstName" name="firstName" placeholder="John" />
-      </section>
+      <FormField id="firstName" label="First Name" required>
+        <Input name="firstName" placeholder="John" />
+      </FormField>
 
-      <section className="space-y-2">
-        <Label htmlFor="email" required>
-          Email
-        </Label>
+      <FormField
+        id="email"
+        label="Email"
+        required
+        error="Please enter a valid email address."
+      >
         <Input
-          id="email"
           name="email"
           type="email"
           placeholder="john@example.com"
           defaultValue="not-an-email"
-          invalid
-          aria-describedby="email-error"
         />
-        <ErrorText id="email-error">
-          Please enter a valid email address.
-        </ErrorText>
-      </section>
+      </FormField>
 
-      <section className="space-y-2">
-        <Label htmlFor="gender" required>
-          Gender
-        </Label>
+      <FormField id="gender" label="Gender" required>
         <Select
-          id="gender"
           name="gender"
           placeholder="Select gender"
           options={[
@@ -53,12 +41,11 @@ export default function ShowcasePage() {
             { value: "prefer_not_to_say", label: "Prefer not to say" },
           ]}
         />
-      </section>
+      </FormField>
 
-      <section className="space-y-2">
-        <Label htmlFor="religion">Religion (optional)</Label>
-        <Input id="religion" name="religion" placeholder="e.g. Buddhist" />
-      </section>
+      <FormField id="religion" label="Religion (optional)">
+        <Input name="religion" placeholder="e.g. Buddhist" />
+      </FormField>
     </div>
   );
 }
