@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import FieldGroup from "@/components/molecules/FieldGroup";
 import FormField from "@/components/molecules/FormField";
 import EmergencyContactFields from "@/components/molecules/EmergencyContactFields";
@@ -9,6 +8,7 @@ import Select from "@/components/atoms/Select";
 import TextArea from "@/components/atoms/TextArea";
 import Button from "@/components/atoms/Button";
 import { validatePatientForm } from "@/lib/validation/patientFormSchema";
+import { usePatientStore } from "@/lib/store/usePatientStore";
 
 const GENDER_OPTIONS = [
   { value: "female", label: "Female" },
@@ -17,30 +17,17 @@ const GENDER_OPTIONS = [
   { value: "prefer_not_to_say", label: "Prefer not to say" },
 ];
 
-const INITIAL_VALUES = {
-  firstName: "",
-  middleName: "",
-  lastName: "",
-  dateOfBirth: "",
-  gender: "",
-  phoneNumber: "",
-  email: "",
-  address: "",
-  preferredLanguage: "",
-  nationality: "",
-  religion: "",
-  emergencyContactName: "",
-  emergencyContactRelationship: "",
-};
-
 export default function PatientForm() {
-  const [values, setValues] = useState(INITIAL_VALUES);
-  const [errors, setErrors] = useState({});
-  const [submitted, setSubmitted] = useState(false);
+  const values = usePatientStore((state) => state.values);
+  const errors = usePatientStore((state) => state.errors);
+  const submitted = usePatientStore((state) => state.submitted);
+  const setField = usePatientStore((state) => state.setField);
+  const setErrors = usePatientStore((state) => state.setErrors);
+  const markSubmitted = usePatientStore((state) => state.markSubmitted);
 
   function handleChange(event) {
     const { name, value } = event.target;
-    setValues((prev) => ({ ...prev, [name]: value }));
+    setField(name, value);
   }
 
   function handleSubmit(event) {
@@ -48,7 +35,7 @@ export default function PatientForm() {
     const result = validatePatientForm(values);
     setErrors(result.errors);
     if (result.success) {
-      setSubmitted(true);
+      markSubmitted();
       console.log("Patient form submitted:", result.data);
     }
   }
