@@ -75,7 +75,7 @@ export default function PatientForm() {
 
   function handleChange(event) {
     const { name, value } = event.target;
-    const cleanedValue = name === "phoneNumber" ? value.replace(/\D/g, "") : value;
+    const cleanedValue = name === "phoneNumber" ? value.replace(/\D/g, "").slice(0, 10) : value;
     setField(name, cleanedValue);
   }
 
@@ -177,6 +177,7 @@ export default function PatientForm() {
           <Input
             name="phoneNumber"
             type="tel"
+            maxLength={10}
             placeholder={t("placeholders.phoneNumber")}
             value={values.phoneNumber}
             onChange={handleChange}
