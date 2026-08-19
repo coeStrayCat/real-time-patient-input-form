@@ -75,7 +75,8 @@ export default function PatientForm() {
 
   function handleChange(event) {
     const { name, value } = event.target;
-    setField(name, value);
+    const cleanedValue = name === "phoneNumber" ? value.replace(/\D/g, "") : value;
+    setField(name, cleanedValue);
   }
 
   function handleSubmit(event) {
