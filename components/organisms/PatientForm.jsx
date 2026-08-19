@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import FieldGroup from "@/components/molecules/FieldGroup";
 import FormField from "@/components/molecules/FormField";
 import EmergencyContactFields from "@/components/molecules/EmergencyContactFields";
@@ -9,6 +10,9 @@ import TextArea from "@/components/atoms/TextArea";
 import Button from "@/components/atoms/Button";
 import { validatePatientForm } from "@/lib/validation/patientFormSchema";
 import { usePatientStore } from "@/lib/store/usePatientStore";
+import { getSocket } from "@/lib/socket/socketClient";
+import { getOrCreatePatientId } from "@/lib/utils/patientId";
+import { EVENTS } from "@/lib/socket/events";
 
 const GENDER_OPTIONS = [
   { value: "female", label: "Female" },
@@ -24,6 +28,12 @@ export default function PatientForm() {
   const setField = usePatientStore((state) => state.setField);
   const setErrors = usePatientStore((state) => state.setErrors);
   const markSubmitted = usePatientStore((state) => state.markSubmitted);
+
+  useEffect(() => {
+    const patientId = getOrCreatePatientId();
+    const socket = getSocket();
+    socket.emit(EVENTS.PATIENT_JOIN, { patientId });
+  }, []);
 
   function handleChange(event) {
     const { name, value } = event.target;
