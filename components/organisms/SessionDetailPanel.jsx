@@ -1,6 +1,9 @@
+"use client";
+
 import SessionDetailField from "@/components/molecules/SessionDetailField";
 import EmptyState from "@/components/molecules/EmptyState";
 import StatusBadge from "@/components/molecules/StatusBadge";
+import { useStaffStore } from "@/lib/store/useStaffStore";
 
 const FIELDS = [
   ["firstName", "First Name"],
@@ -18,7 +21,11 @@ const FIELDS = [
   ["emergencyContactRelationship", "Emergency Contact Relationship"],
 ];
 
-export default function SessionDetailPanel({ session }) {
+export default function SessionDetailPanel() {
+  const session = useStaffStore(
+    (state) => state.sessions.find((s) => s.patientId === state.selectedId) ?? null,
+  );
+
   if (!session) {
     return <EmptyState>Select a patient session to see live details.</EmptyState>;
   }

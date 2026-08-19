@@ -1,76 +1,60 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect } from "react";
 import StaffViewLayout from "@/components/templates/StaffViewLayout";
 import StaffSessionList from "@/components/organisms/StaffSessionList";
 import SessionDetailPanel from "@/components/organisms/SessionDetailPanel";
-
-const MOCK_SESSIONS = [
-  {
-    id: "mock-1",
-    label: "Patient session — 09:14",
-    status: "active",
-    lastUpdated: "just now",
-    fields: {
-      firstName: "Manee",
-      lastName: "Jaidee",
-      dateOfBirth: "1990-05-12",
-      gender: "female",
-      phoneNumber: "081-234-5678",
-      email: "manee@example.com",
-      address: "123 Sukhumvit Rd, Bangkok",
-      preferredLanguage: "Thai",
-      nationality: "Thai",
-    },
-  },
-  {
-    id: "mock-2",
-    label: "Patient session — 09:02",
-    status: "inactive",
-    lastUpdated: "5 min ago",
-    fields: {
-      firstName: "Somchai",
-      lastName: "Srisuk",
-      email: "somchai@example.com",
-    },
-  },
-  {
-    id: "mock-3",
-    label: "Patient session — 08:47",
-    status: "submitted",
-    lastUpdated: "20 min ago",
-    fields: {
-      firstName: "Suda",
-      lastName: "Wongpech",
-      dateOfBirth: "1985-11-02",
-      gender: "female",
-      phoneNumber: "082-345-6789",
-      email: "suda@example.com",
-      address: "45 Silom Rd, Bangkok",
-      preferredLanguage: "Thai",
-      nationality: "Thai",
-      religion: "Buddhist",
-    },
-  },
-];
+import { useStaffStore } from "@/lib/store/useStaffStore";
+import { getSocket } from "@/lib/socket/socketClient";
+import { EVENTS } from "@/lib/socket/events";
 
 export default function StaffDashboard() {
-  const [selectedId, setSelectedId] = useState(null);
-  const selectedSession = MOCK_SESSIONS.find((s) => s.id === selectedId) ?? null;
+  const selectedSession = useStaffStore(
+    (state) => state.sessions.find((s) => s.patientId === state.selectedId) ?? null,
+  );
+  const clearSelection = useStaffStore((state) => state.clearSelection);
+  const setSessionList = useStaffStore((state) => state.setSessionList);
+  const upsertSession = useStaffStore((state) => state.upsertSession);
+  const updateSessionFields = useStaffStore((state) => state.updateSessionFields);
+  const updateSessionStatus = useStaffStore((state) => state.updateSessionStatus);
+
+  useEffect(() => {
+    const socket = getSocket();
+    socket.emit(EVENTS.STAFF_JOIN);
+
+    function handleSessionList({ sessions }) {
+      setSessionList(sessions);
+    }
+    function handleSessionNew({ session }) {
+      upsertSession(session);
+    }
+    function handleSessionUpdate({ patientId, fields, status, lastUpdated }) {
+      updateSessionFields(patientId, fields, status, lastUpdated);
+    }
+    function handleSessionStatus({ patientId, status, connected }) {
+      updateSessionStatus(patientId, status, connected);
+    }
+
+    socket.on(EVENTS.STAFF_SESSION_LIST, handleSessionList);
+    socket.on(EVENTS.SESSION_NEW, handleSessionNew);
+    socket.on(EVENTS.SESSION_UPDATE, handleSessionUpdate);
+    socket.on(EVENTS.SESSION_STATUS, handleSessionStatus);
+
+    return () => {
+      socket.off(EVENTS.STAFF_SESSION_LIST, handleSessionList);
+      socket.off(EVENTS.SESSION_NEW, handleSessionNew);
+      socket.off(EVENTS.SESSION_UPDATE, handleSessionUpdate);
+      socket.off(EVENTS.SESSION_STATUS, handleSessionStatus);
+    };
+  }, [setSessionList, upsertSession, updateSessionFields, updateSessionStatus]);
 
   return (
     <StaffViewLayout
       hasSelection={Boolean(selectedSession)}
       selectedLabel={selectedSession?.label}
-      onBack={() => setSelectedId(null)}
-      list={
-        <StaffSessionList
-          sessions={MOCK_SESSIONS}
-          selectedId={selectedId}
-          onSelect={setSelectedId}
-        />
-      }
-      detail={<SessionDetailPanel session={selectedSession} />}
+      onBack={clearSelection}
+      list={<StaffSessionList />}
+      detail={<SessionDetailPanel />}
     />
   );
 }

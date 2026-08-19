@@ -1,7 +1,14 @@
+"use client";
+
 import SessionListItem from "@/components/molecules/SessionListItem";
 import EmptyState from "@/components/molecules/EmptyState";
+import { useStaffStore } from "@/lib/store/useStaffStore";
 
-export default function StaffSessionList({ sessions, selectedId, onSelect }) {
+export default function StaffSessionList() {
+  const sessions = useStaffStore((state) => state.sessions);
+  const selectedId = useStaffStore((state) => state.selectedId);
+  const selectSession = useStaffStore((state) => state.selectSession);
+
   if (sessions.length === 0) {
     return <EmptyState>ยังไม่มีการให้บริการผู้ป่วยรายใดเลย</EmptyState>;
   }
@@ -10,10 +17,10 @@ export default function StaffSessionList({ sessions, selectedId, onSelect }) {
     <div className="space-y-1 p-2">
       {sessions.map((session) => (
         <SessionListItem
-          key={session.id}
+          key={session.patientId}
           session={session}
-          active={session.id === selectedId}
-          onClick={() => onSelect(session.id)}
+          active={session.patientId === selectedId}
+          onClick={() => selectSession(session.patientId)}
         />
       ))}
     </div>
