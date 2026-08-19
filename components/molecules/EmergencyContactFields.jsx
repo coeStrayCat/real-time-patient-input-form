@@ -1,30 +1,25 @@
 import FormField from "@/components/molecules/FormField";
 import Input from "@/components/atoms/Input";
 
-
-export default function EmergencyContactFields({ values, errors, onChange }) {
+export default function EmergencyContactFields({ values, errors, onChange, t }) {
   return (
     <>
-      <FormField
-        id="emergencyContactName"
-        label="Emergency Contact Name (optional)"
-        error={errors.emergencyContactName}
-      >
+      <FormField id="emergencyContactName" label={t("fields.emergencyContactName")} error={errors.emergencyContactName}>
         <Input
           name="emergencyContactName"
-          placeholder="Manee Jaidee"
+          placeholder={t("placeholders.emergencyContactName")}
           value={values.emergencyContactName}
           onChange={onChange}
         />
       </FormField>
       <FormField
         id="emergencyContactRelationship"
-        label="Relationship (optional)"
+        label={t("fields.emergencyContactRelationship")}
         error={errors.emergencyContactRelationship}
       >
         <Input
           name="emergencyContactRelationship"
-          placeholder="e.g. Spouse"
+          placeholder={t("placeholders.emergencyContactRelationship")}
           value={values.emergencyContactRelationship}
           onChange={onChange}
         />

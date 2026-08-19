@@ -2,18 +2,18 @@ import Badge from "@/components/atoms/Badge";
 import StatusDot from "@/components/atoms/StatusDot";
 
 const STATUS_CONFIG = {
-  connected: { label: "เชื่อมต่อแล้ว", color: "green" },
-  reconnecting: { label: "กำลังเชื่อมต่อใหม่...", color: "amber" },
-  offline: { label: "ออฟไลน์", color: "zinc" },
+  connected: { key: "connection.connected", color: "green" },
+  reconnecting: { key: "connection.reconnecting", color: "amber" },
+  offline: { key: "connection.offline", color: "zinc" },
 };
 
-export default function ConnectionStatusBadge({ status }) {
+export default function ConnectionStatusBadge({ status, t }) {
   const config = STATUS_CONFIG[status] ?? STATUS_CONFIG.offline;
 
   return (
     <Badge color={config.color}>
       <StatusDot color={config.color} />
-      {config.label}
+      {t(config.key)}
     </Badge>
   );
 }

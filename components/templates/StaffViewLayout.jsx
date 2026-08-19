@@ -1,10 +1,18 @@
 import MobileBackHeader from "@/components/molecules/MobileBackHeader";
 
-export default function StaffViewLayout({ hasSelection, selectedLabel, onBack, list, detail }) {
+export default function StaffViewLayout({
+  hasSelection,
+  selectedLabel,
+  onBack,
+  backLabel,
+  list,
+  detail,
+  header,
+}) {
   return (
     <div className="flex h-screen flex-col">
-      <header className="border-b border-zinc-200 bg-white px-4 py-4 sm:px-6 lg:px-8">
-        <h1 className="text-lg font-semibold text-zinc-900">Staff View</h1>
+      <header className="flex items-center justify-between border-b border-zinc-200 bg-white px-4 py-4 sm:px-6 lg:px-8">
+        {header}
       </header>
       <div className="flex flex-1 overflow-hidden">
         <aside
@@ -19,7 +27,11 @@ export default function StaffViewLayout({ hasSelection, selectedLabel, onBack, l
             hasSelection ? "block" : "hidden"
           }`}
         >
-          {hasSelection && <MobileBackHeader onBack={onBack}>{selectedLabel}</MobileBackHeader>}
+          {hasSelection && (
+            <MobileBackHeader onBack={onBack} backLabel={backLabel}>
+              {selectedLabel}
+            </MobileBackHeader>
+          )}
           {detail}
         </section>
       </div>

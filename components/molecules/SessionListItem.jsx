@@ -1,7 +1,7 @@
 import StatusBadge from "@/components/molecules/StatusBadge";
 import { formatRelativeTime } from "@/lib/utils/formatTime";
 
-export default function SessionListItem({ session, active = false, onClick }) {
+export default function SessionListItem({ session, active = false, onClick, t }) {
   return (
     <button
       type="button"
@@ -13,8 +13,8 @@ export default function SessionListItem({ session, active = false, onClick }) {
     >
       <span className="text-sm font-medium text-zinc-900">{session.label}</span>
       <span className="flex items-center justify-between gap-2">
-        <StatusBadge status={session.status} connected={session.connected} />
-        <span className="text-xs text-zinc-400">{formatRelativeTime(session.lastUpdated)}</span>
+        <StatusBadge status={session.status} connected={session.connected} t={t} />
+        <span className="text-xs text-zinc-400">{formatRelativeTime(session.lastUpdated, t)}</span>
       </span>
     </button>
   );

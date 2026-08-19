@@ -13,15 +13,11 @@ import { usePatientStore } from "@/lib/store/usePatientStore";
 import { getSocket } from "@/lib/socket/socketClient";
 import { getOrCreatePatientId } from "@/lib/utils/patientId";
 import { EVENTS } from "@/lib/socket/events";
-
-const GENDER_OPTIONS = [
-  { value: "female", label: "Female" },
-  { value: "male", label: "Male" },
-  { value: "other", label: "Other" },
-  { value: "prefer_not_to_say", label: "Prefer not to say" },
-];
+import { useTranslate } from "@/lib/i18n/useTranslate";
+import { translateFormErrors } from "@/lib/i18n/translateErrors";
 
 export default function PatientForm() {
+  const t = useTranslate();
   const values = usePatientStore((state) => state.values);
   const errors = usePatientStore((state) => state.errors);
   const submitted = usePatientStore((state) => state.submitted);
@@ -30,6 +26,13 @@ export default function PatientForm() {
   const markSubmitted = usePatientStore((state) => state.markSubmitted);
   const setConnectionStatus = usePatientStore((state) => state.setConnectionStatus);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const genderOptions = [
+    { value: "female", label: t("genderOptions.female") },
+    { value: "male", label: t("genderOptions.male") },
+    { value: "other", label: t("genderOptions.other") },
+    { value: "prefer_not_to_say", label: t("genderOptions.preferNotToSay") },
+  ];
 
   useEffect(() => {
     const patientId = getOrCreatePatientId();
@@ -77,7 +80,7 @@ export default function PatientForm() {
   function handleSubmit(event) {
     event.preventDefault();
     const result = validatePatientForm(values);
-    setErrors(result.errors);
+    setErrors(translateFormErrors(result.errors, t));
     if (!result.success) return;
 
     setIsSubmitting(true);
@@ -88,7 +91,7 @@ export default function PatientForm() {
       if (ack?.success) {
         markSubmitted();
       } else {
-        setErrors(ack?.errors ?? {});
+        setErrors(translateFormErrors(ack?.errors ?? {}, t));
       }
     });
   }
@@ -96,81 +99,106 @@ export default function PatientForm() {
   if (submitted) {
     return (
       <div className="rounded-md border border-green-200 bg-green-50 p-6 text-center text-sm text-green-800">
-        ส่งข้อมูลเรียบร้อยแล้ว ขอบคุณค่ะ
+        {t("formActions.successMessage")}
       </div>
     );
   }
 
   return (
     <form className="space-y-8" onSubmit={handleSubmit} noValidate>
-      <FieldGroup title="Personal Information">
-        <FormField id="firstName" label="First Name" required error={errors.firstName}>
-          <Input name="firstName" placeholder="Manee" value={values.firstName} onChange={handleChange} />
+      <FieldGroup title={t("sections.personal")}>
+        <FormField id="firstName" label={t("fields.firstName")} required error={errors.firstName}>
+          <Input
+            name="firstName"
+            placeholder={t("placeholders.firstName")}
+            value={values.firstName}
+            onChange={handleChange}
+          />
         </FormField>
-        <FormField id="middleName" label="Middle Name (optional)" error={errors.middleName}>
-          <Input name="middleName" placeholder="Michael" value={values.middleName} onChange={handleChange} />
+        <FormField id="middleName" label={t("fields.middleName")} error={errors.middleName}>
+          <Input
+            name="middleName"
+            placeholder={t("placeholders.middleName")}
+            value={values.middleName}
+            onChange={handleChange}
+          />
         </FormField>
-        <FormField id="lastName" label="Last Name" required error={errors.lastName}>
-          <Input name="lastName" placeholder="Jaidee" value={values.lastName} onChange={handleChange} />
+        <FormField id="lastName" label={t("fields.lastName")} required error={errors.lastName}>
+          <Input
+            name="lastName"
+            placeholder={t("placeholders.lastName")}
+            value={values.lastName}
+            onChange={handleChange}
+          />
         </FormField>
-        <FormField id="dateOfBirth" label="Date of Birth" required error={errors.dateOfBirth}>
+        <FormField id="dateOfBirth" label={t("fields.dateOfBirth")} required error={errors.dateOfBirth}>
           <Input name="dateOfBirth" type="date" value={values.dateOfBirth} onChange={handleChange} />
         </FormField>
-        <FormField id="gender" label="Gender" required error={errors.gender}>
+        <FormField id="gender" label={t("fields.gender")} required error={errors.gender}>
           <Select
             name="gender"
-            placeholder="Select gender"
-            options={GENDER_OPTIONS}
+            placeholder={t("placeholders.genderSelect")}
+            options={genderOptions}
             value={values.gender}
             onChange={handleChange}
           />
         </FormField>
-        <FormField id="nationality" label="Nationality" required error={errors.nationality}>
-          <Input name="nationality" placeholder="e.g. Thai" value={values.nationality} onChange={handleChange} />
+        <FormField id="nationality" label={t("fields.nationality")} required error={errors.nationality}>
+          <Input
+            name="nationality"
+            placeholder={t("placeholders.nationality")}
+            value={values.nationality}
+            onChange={handleChange}
+          />
         </FormField>
-        <FormField id="religion" label="Religion (optional)" error={errors.religion}>
-          <Input name="religion" placeholder="e.g. Buddhist" value={values.religion} onChange={handleChange} />
+        <FormField id="religion" label={t("fields.religion")} error={errors.religion}>
+          <Input
+            name="religion"
+            placeholder={t("placeholders.religion")}
+            value={values.religion}
+            onChange={handleChange}
+          />
         </FormField>
       </FieldGroup>
 
-      <FieldGroup title="Contact Information">
-        <FormField id="phoneNumber" label="Phone Number" required error={errors.phoneNumber}>
+      <FieldGroup title={t("sections.contact")}>
+        <FormField id="phoneNumber" label={t("fields.phoneNumber")} required error={errors.phoneNumber}>
           <Input
             name="phoneNumber"
             type="tel"
-            placeholder="081-234-5678"
+            placeholder={t("placeholders.phoneNumber")}
             value={values.phoneNumber}
             onChange={handleChange}
           />
         </FormField>
-        <FormField id="email" label="Email" required error={errors.email}>
+        <FormField id="email" label={t("fields.email")} required error={errors.email}>
           <Input
             name="email"
             type="email"
-            placeholder="manee@example.com"
+            placeholder={t("placeholders.email")}
             value={values.email}
             onChange={handleChange}
           />
         </FormField>
         <FormField
           id="preferredLanguage"
-          label="Preferred Language"
+          label={t("fields.preferredLanguage")}
           required
           error={errors.preferredLanguage}
         >
           <Input
             name="preferredLanguage"
-            placeholder="e.g. Thai"
+            placeholder={t("placeholders.preferredLanguage")}
             value={values.preferredLanguage}
             onChange={handleChange}
           />
         </FormField>
         <div className="md:col-span-2">
-          <FormField id="address" label="Address" required error={errors.address}>
+          <FormField id="address" label={t("fields.address")} required error={errors.address}>
             <TextArea
               name="address"
               rows={3}
-              placeholder="House no., street, city, postal code"
+              placeholder={t("placeholders.address")}
               value={values.address}
               onChange={handleChange}
             />
@@ -178,13 +206,13 @@ export default function PatientForm() {
         </div>
       </FieldGroup>
 
-      <FieldGroup title="Emergency Contact (optional)">
-        <EmergencyContactFields values={values} errors={errors} onChange={handleChange} />
+      <FieldGroup title={t("sections.emergency")}>
+        <EmergencyContactFields values={values} errors={errors} onChange={handleChange} t={t} />
       </FieldGroup>
 
       <div className="flex justify-end">
         <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "กำลังส่ง..." : "Submit"}
+          {isSubmitting ? t("formActions.submitting") : t("formActions.submit")}
         </Button>
       </div>
     </form>

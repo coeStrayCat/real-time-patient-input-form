@@ -4,11 +4,14 @@ import { useEffect } from "react";
 import StaffViewLayout from "@/components/templates/StaffViewLayout";
 import StaffSessionList from "@/components/organisms/StaffSessionList";
 import SessionDetailPanel from "@/components/organisms/SessionDetailPanel";
+import StaffViewHeader from "@/components/organisms/StaffViewHeader";
 import { useStaffStore } from "@/lib/store/useStaffStore";
 import { getSocket } from "@/lib/socket/socketClient";
 import { EVENTS } from "@/lib/socket/events";
+import { useTranslate } from "@/lib/i18n/useTranslate";
 
 export default function StaffDashboard() {
+  const t = useTranslate();
   const selectedSession = useStaffStore(
     (state) => state.sessions.find((s) => s.patientId === state.selectedId) ?? null,
   );
@@ -62,9 +65,11 @@ export default function StaffDashboard() {
 
   return (
     <StaffViewLayout
+      header={<StaffViewHeader />}
       hasSelection={Boolean(selectedSession)}
       selectedLabel={selectedSession?.label}
       onBack={clearSelection}
+      backLabel={t("common.back")}
       list={<StaffSessionList />}
       detail={<SessionDetailPanel />}
     />
