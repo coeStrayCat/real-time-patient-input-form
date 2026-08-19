@@ -34,7 +34,7 @@ export default function SessionDetailPanel() {
     <div className="space-y-6 p-4 sm:p-6">
       <div className="flex items-center justify-between gap-2">
         <h2 className="text-base font-semibold text-zinc-900">{session.label}</h2>
-        <StatusBadge status={session.status} />
+        <StatusBadge status={session.status} connected={session.connected} />
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {FIELDS.map(([key, label]) => (
