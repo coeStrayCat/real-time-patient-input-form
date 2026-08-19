@@ -11,7 +11,7 @@ import Button from "@/components/atoms/Button";
 import { validatePatientForm } from "@/lib/validation/patientFormSchema";
 import { usePatientStore } from "@/lib/store/usePatientStore";
 import { getSocket } from "@/lib/socket/socketClient";
-import { getOrCreatePatientId } from "@/lib/utils/patientId";
+import { getOrCreatePatientId, resetPatientId } from "@/lib/utils/patientId";
 import { EVENTS } from "@/lib/socket/events";
 import { useTranslate } from "@/lib/i18n/useTranslate";
 import { translateFormErrors } from "@/lib/i18n/translateErrors";
@@ -24,6 +24,7 @@ export default function PatientForm() {
   const setField = usePatientStore((state) => state.setField);
   const setErrors = usePatientStore((state) => state.setErrors);
   const markSubmitted = usePatientStore((state) => state.markSubmitted);
+  const resetForm = usePatientStore((state) => state.reset);
   const setConnectionStatus = usePatientStore((state) => state.setConnectionStatus);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -96,10 +97,19 @@ export default function PatientForm() {
     });
   }
 
+  function handleStartNewForm() {
+    const newPatientId = resetPatientId();
+    resetForm();
+    getSocket().emit(EVENTS.PATIENT_JOIN, { patientId: newPatientId });
+  }
+
   if (submitted) {
     return (
-      <div className="rounded-md border border-green-200 bg-green-50 p-6 text-center text-sm text-green-800">
-        {t("formActions.successMessage")}
+      <div className="space-y-4 rounded-md border border-green-200 bg-green-50 p-6 text-center">
+        <p className="text-sm text-green-800">{t("formActions.successMessage")}</p>
+        <Button type="button" variant="secondary" onClick={handleStartNewForm}>
+          {t("formActions.newForm")}
+        </Button>
       </div>
     );
   }
