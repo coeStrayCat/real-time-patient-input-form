@@ -28,13 +28,33 @@ export default function PatientForm() {
   const setField = usePatientStore((state) => state.setField);
   const setErrors = usePatientStore((state) => state.setErrors);
   const markSubmitted = usePatientStore((state) => state.markSubmitted);
+  const setConnectionStatus = usePatientStore((state) => state.setConnectionStatus);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const patientId = getOrCreatePatientId();
     const socket = getSocket();
     socket.emit(EVENTS.PATIENT_JOIN, { patientId });
-  }, []);
+
+    function updateStatus() {
+      if (!navigator.onLine) setConnectionStatus("offline");
+      else if (socket.connected) setConnectionStatus("connected");
+      else setConnectionStatus("reconnecting");
+    }
+
+    updateStatus();
+    socket.on("connect", updateStatus);
+    socket.on("disconnect", updateStatus);
+    window.addEventListener("online", updateStatus);
+    window.addEventListener("offline", updateStatus);
+
+    return () => {
+      socket.off("connect", updateStatus);
+      socket.off("disconnect", updateStatus);
+      window.removeEventListener("online", updateStatus);
+      window.removeEventListener("offline", updateStatus);
+    };
+  }, [setConnectionStatus]);
 
   useEffect(() => {
     const patientId = getOrCreatePatientId();
