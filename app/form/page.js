@@ -1,10 +1,10 @@
 import PatientFormLayout from "@/components/templates/PatientFormLayout";
 import PatientForm from "@/components/organisms/PatientForm";
-import PatientConnectionStatus from "@/components/organisms/PatientConnectionStatus";
+import PatientFormHeader from "@/components/organisms/PatientFormHeader";
 
 export default function FormPage() {
   return (
-    <PatientFormLayout headerRight={<PatientConnectionStatus />}>
+    <PatientFormLayout header={<PatientFormHeader />}>
       <PatientForm />
     </PatientFormLayout>
   );
