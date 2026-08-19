@@ -35,6 +35,19 @@ export default function PatientForm() {
     socket.emit(EVENTS.PATIENT_JOIN, { patientId });
   }, []);
 
+  useEffect(() => {
+    const patientId = getOrCreatePatientId();
+    const socket = getSocket();
+    const timeoutId = setTimeout(() => {
+      socket.emit(EVENTS.PATIENT_FIELD_UPDATE, {
+        patientId,
+        fields: values,
+        timestamp: Date.now(),
+      });
+    }, 400);
+    return () => clearTimeout(timeoutId);
+  }, [values]);
+
   function handleChange(event) {
     const { name, value } = event.target;
     setField(name, value);
