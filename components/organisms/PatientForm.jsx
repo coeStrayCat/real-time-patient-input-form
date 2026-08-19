@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import FieldGroup from "@/components/molecules/FieldGroup";
 import FormField from "@/components/molecules/FormField";
 import EmergencyContactFields from "@/components/molecules/EmergencyContactFields";
@@ -28,6 +28,7 @@ export default function PatientForm() {
   const setField = usePatientStore((state) => state.setField);
   const setErrors = usePatientStore((state) => state.setErrors);
   const markSubmitted = usePatientStore((state) => state.markSubmitted);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const patientId = getOrCreatePatientId();
@@ -57,10 +58,19 @@ export default function PatientForm() {
     event.preventDefault();
     const result = validatePatientForm(values);
     setErrors(result.errors);
-    if (result.success) {
-      markSubmitted();
-      console.log("Patient form submitted:", result.data);
-    }
+    if (!result.success) return;
+
+    setIsSubmitting(true);
+    const patientId = getOrCreatePatientId();
+    const socket = getSocket();
+    socket.emit(EVENTS.PATIENT_SUBMIT, { patientId, formData: result.data }, (ack) => {
+      setIsSubmitting(false);
+      if (ack?.success) {
+        markSubmitted();
+      } else {
+        setErrors(ack?.errors ?? {});
+      }
+    });
   }
 
   if (submitted) {
@@ -153,7 +163,9 @@ export default function PatientForm() {
       </FieldGroup>
 
       <div className="flex justify-end">
-        <Button type="submit">Submit</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "กำลังส่ง..." : "Submit"}
+        </Button>
       </div>
     </form>
   );

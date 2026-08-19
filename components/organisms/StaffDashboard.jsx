@@ -17,6 +17,7 @@ export default function StaffDashboard() {
   const upsertSession = useStaffStore((state) => state.upsertSession);
   const updateSessionFields = useStaffStore((state) => state.updateSessionFields);
   const updateSessionStatus = useStaffStore((state) => state.updateSessionStatus);
+  const markSessionSubmitted = useStaffStore((state) => state.markSessionSubmitted);
 
   useEffect(() => {
     const socket = getSocket();
@@ -34,19 +35,30 @@ export default function StaffDashboard() {
     function handleSessionStatus({ patientId, status, connected }) {
       updateSessionStatus(patientId, status, connected);
     }
+    function handleSessionSubmitted({ patientId, formData, submittedAt }) {
+      markSessionSubmitted(patientId, formData, submittedAt);
+    }
 
     socket.on(EVENTS.STAFF_SESSION_LIST, handleSessionList);
     socket.on(EVENTS.SESSION_NEW, handleSessionNew);
     socket.on(EVENTS.SESSION_UPDATE, handleSessionUpdate);
     socket.on(EVENTS.SESSION_STATUS, handleSessionStatus);
+    socket.on(EVENTS.SESSION_SUBMITTED, handleSessionSubmitted);
 
     return () => {
       socket.off(EVENTS.STAFF_SESSION_LIST, handleSessionList);
       socket.off(EVENTS.SESSION_NEW, handleSessionNew);
       socket.off(EVENTS.SESSION_UPDATE, handleSessionUpdate);
       socket.off(EVENTS.SESSION_STATUS, handleSessionStatus);
+      socket.off(EVENTS.SESSION_SUBMITTED, handleSessionSubmitted);
     };
-  }, [setSessionList, upsertSession, updateSessionFields, updateSessionStatus]);
+  }, [
+    setSessionList,
+    upsertSession,
+    updateSessionFields,
+    updateSessionStatus,
+    markSessionSubmitted,
+  ]);
 
   return (
     <StaffViewLayout
