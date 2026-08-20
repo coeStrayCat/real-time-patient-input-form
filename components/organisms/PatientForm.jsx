@@ -69,7 +69,7 @@ export default function PatientForm() {
         fields: values,
         timestamp: Date.now(),
       });
-    }, 400);
+    }, 200);
     return () => clearTimeout(timeoutId);
   }, [values]);
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SessionListItem from "@/components/molecules/SessionListItem";
 import EmptyState from "@/components/molecules/EmptyState";
 import Select from "@/components/atoms/Select";
@@ -17,6 +17,12 @@ export default function StaffSessionList() {
   const t = useTranslate();
   const [filter, setFilter] = useState("all");
 
+  const [, forceTick] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => forceTick((n) => n + 1), 15_000);
+    return () => clearInterval(interval);
+  }, []);
+
   const filterOptions = FILTERS.map((f) => ({
     value: f,
     label: f === "all" ? t("staff.filterAll") : t(`status.${f}`),
@@ -27,7 +33,6 @@ export default function StaffSessionList() {
     .sort((a, b) => {
       const orderDiff = (STATUS_ORDER[a.status] ?? 99) - (STATUS_ORDER[b.status] ?? 99);
       if (orderDiff !== 0) return orderDiff;
-      // Within the same status, most recently active first.
       return (b.lastUpdated ?? b.createdAt ?? 0) - (a.lastUpdated ?? a.createdAt ?? 0);
     });
 

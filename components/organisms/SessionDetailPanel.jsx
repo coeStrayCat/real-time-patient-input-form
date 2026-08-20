@@ -43,7 +43,11 @@ export default function SessionDetailPanel() {
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {FIELD_KEYS.map((key) => (
-          <SessionDetailField key={key} label={t(`fields.${key}`)} value={session.fields?.[key]} />
+          <SessionDetailField
+            key={`${session.patientId}-${key}`}
+            label={t(`fields.${key}`)}
+            value={session.fields?.[key]}
+          />
         ))}
       </div>
     </div>
