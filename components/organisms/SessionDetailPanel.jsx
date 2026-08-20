@@ -3,6 +3,7 @@
 import SessionDetailField from "@/components/molecules/SessionDetailField";
 import EmptyState from "@/components/molecules/EmptyState";
 import StatusBadge from "@/components/molecules/StatusBadge";
+import UserIcon from "@/app/assets/icons/user-solid-full.svg";
 import { useStaffStore } from "@/lib/store/useStaffStore";
 import { useTranslate } from "@/lib/i18n/useTranslate";
 import { formatClockTime } from "@/lib/utils/formatTime";
@@ -35,8 +36,9 @@ export default function SessionDetailPanel() {
 
   return (
     <div className="space-y-6 p-4 sm:p-6 lg:max-w-3xl">
-      <div className="flex items-center justify-between gap-2">
-        <h2 className="text-base font-semibold text-zinc-900">
+      <div className="grid-cols-1 sm:flex items-center justify-between gap-2">
+        <h2 className="flex items-center gap-1.5 text-base font-semibold text-zinc-900">
+          <UserIcon className="h-4 w-4 shrink-0 fill-current text-zinc-400" />
           {t("staff.sessionLabel", formatClockTime(session.createdAt))}
         </h2>
         <StatusBadge status={session.status} connected={session.connected} t={t} />

@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useTranslate } from "@/lib/i18n/useTranslate";
 import LanguageSwitcher from "@/components/organisms/LanguageSwitcher";
+import PenToSquareIcon from "@/app/assets/icons/pen-to-square-regular-full.svg";
+import DisplayIcon from "@/app/assets/icons/display-solid-full.svg";
 
 export default function LandingChoice() {
   const t = useTranslate();
@@ -21,16 +23,18 @@ export default function LandingChoice() {
       <div className="grid w-full max-w-2xl grid-cols-1 gap-4 sm:grid-cols-2">
         <Link
           href="/form"
-          className="rounded-lg border border-zinc-200 bg-white p-6 text-center shadow-sm transition-colors hover:border-zinc-400 hover:shadow-md"
+          className="flex flex-col items-center rounded-lg border border-zinc-200 bg-white p-6 text-center shadow-sm transition-colors hover:border-zinc-400 hover:shadow-md"
         >
-          <h2 className="text-lg font-semibold text-zinc-900">{t("layout.patientRegistration")}</h2>
+          <PenToSquareIcon className="h-8 w-8 fill-current text-zinc-700" />
+          <h2 className="mt-3 text-lg font-semibold text-zinc-900">{t("layout.patientRegistration")}</h2>
           <p className="mt-1 text-sm text-zinc-500">{t("landing.patientDescription")}</p>
         </Link>
         <Link
           href="/staff"
-          className="rounded-lg border border-zinc-200 bg-white p-6 text-center shadow-sm transition-colors hover:border-zinc-400 hover:shadow-md"
+          className="flex flex-col items-center rounded-lg border border-zinc-200 bg-white p-6 text-center shadow-sm transition-colors hover:border-zinc-400 hover:shadow-md"
         >
-          <h2 className="text-lg font-semibold text-zinc-900">{t("layout.staffView")}</h2>
+          <DisplayIcon className="h-8 w-8 fill-current text-zinc-700" />
+          <h2 className="mt-3 text-lg font-semibold text-zinc-900">{t("layout.staffView")}</h2>
           <p className="mt-1 text-sm text-zinc-500">{t("landing.staffDescription")}</p>
         </Link>
       </div>

@@ -68,9 +68,6 @@ export default function StaffDashboard() {
     <StaffViewLayout
       header={<StaffViewHeader />}
       hasSelection={Boolean(selectedSession)}
-      selectedLabel={
-        selectedSession ? t("staff.sessionLabel", formatClockTime(selectedSession.createdAt)) : undefined
-      }
       onBack={clearSelection}
       backLabel={t("common.back")}
       list={<StaffSessionList />}

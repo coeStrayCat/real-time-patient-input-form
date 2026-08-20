@@ -1,4 +1,5 @@
 import StatusBadge from "@/components/molecules/StatusBadge";
+import UserIcon from "@/app/assets/icons/user-solid-full.svg";
 import { formatRelativeTime, formatClockTime } from "@/lib/utils/formatTime";
 
 function getDisplayName(fields) {
@@ -18,7 +19,8 @@ export default function SessionListItem({ session, active = false, onClick, t })
         active ? "border-zinc-900 bg-zinc-50" : "border-transparent hover:bg-zinc-50"
       }`}
     >
-      <span className="text-sm font-medium text-zinc-900">
+      <span className="flex items-center gap-1.5 text-sm font-medium text-zinc-900">
+        <UserIcon className="h-3.5 w-3.5 shrink-0 fill-current text-zinc-400" />
         {displayName ?? t("staff.sessionLabel", formatClockTime(session.createdAt))}
       </span>
       <span className="flex items-center justify-between gap-2">
