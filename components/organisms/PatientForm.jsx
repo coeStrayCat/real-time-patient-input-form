@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import FieldGroup from "@/components/molecules/FieldGroup";
 import FormField from "@/components/molecules/FormField";
 import EmergencyContactFields from "@/components/molecules/EmergencyContactFields";
@@ -18,6 +19,7 @@ import { translateFormErrors } from "@/lib/i18n/translateErrors";
 
 export default function PatientForm() {
   const t = useTranslate();
+  const router = useRouter();
   const values = usePatientStore((state) => state.values);
   const errors = usePatientStore((state) => state.errors);
   const submitted = usePatientStore((state) => state.submitted);
@@ -72,6 +74,24 @@ export default function PatientForm() {
     }, 200);
     return () => clearTimeout(timeoutId);
   }, [values]);
+  
+  useEffect(() => {
+    function handleUnload() {
+      getSocket().disconnect();
+    }
+    window.addEventListener("beforeunload", handleUnload);
+    window.addEventListener("pagehide", handleUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleUnload);
+      window.removeEventListener("pagehide", handleUnload);
+      getSocket().disconnect();
+    };
+  }, []);
+
+  function handleExit() {
+    getSocket().disconnect();
+    router.push("/");
+  }
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -117,6 +137,12 @@ export default function PatientForm() {
 
   return (
     <form className="space-y-8" onSubmit={handleSubmit} noValidate>
+      <div className="flex justify-end">
+        <Button type="button" variant="secondary" onClick={handleExit}>
+          {t("formActions.exit")}
+        </Button>
+      </div>
+
       <FieldGroup title={t("sections.personal")}>
         <FormField id="firstName" label={t("fields.firstName")} required error={errors.firstName}>
           <Input
