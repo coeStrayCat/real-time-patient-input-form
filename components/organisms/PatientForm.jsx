@@ -9,6 +9,7 @@ import Input from "@/components/atoms/Input";
 import Select from "@/components/atoms/Select";
 import TextArea from "@/components/atoms/TextArea";
 import Button from "@/components/atoms/Button";
+import AngleLeftIcon from "@/app/assets/icons/angle-left-solid-full.svg";
 import { validatePatientForm } from "@/lib/validation/patientFormSchema";
 import { usePatientStore } from "@/lib/store/usePatientStore";
 import { getSocket } from "@/lib/socket/socketClient";
@@ -137,10 +138,15 @@ export default function PatientForm() {
 
   return (
     <form className="space-y-8" onSubmit={handleSubmit} noValidate>
-      <div className="flex justify-end">
-        <Button type="button" variant="secondary" onClick={handleExit}>
-          {t("formActions.exit")}
-        </Button>
+      <div className="flex justify-start">
+        <button
+          type="button"
+          onClick={handleExit}
+          className="flex items-center gap-1 text-sm font-medium text-zinc-600 hover:text-zinc-900"
+        >
+          <AngleLeftIcon className="h-3 w-3 fill-current" />
+          {t("common.back")}
+        </button>
       </div>
 
       <FieldGroup title={t("sections.personal")}>
