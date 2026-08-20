@@ -9,6 +9,7 @@ import { useStaffStore } from "@/lib/store/useStaffStore";
 import { getSocket } from "@/lib/socket/socketClient";
 import { EVENTS } from "@/lib/socket/events";
 import { useTranslate } from "@/lib/i18n/useTranslate";
+import { formatClockTime } from "@/lib/utils/formatTime";
 
 export default function StaffDashboard() {
   const t = useTranslate();
@@ -67,7 +68,9 @@ export default function StaffDashboard() {
     <StaffViewLayout
       header={<StaffViewHeader />}
       hasSelection={Boolean(selectedSession)}
-      selectedLabel={selectedSession?.label}
+      selectedLabel={
+        selectedSession ? t("staff.sessionLabel", formatClockTime(selectedSession.createdAt)) : undefined
+      }
       onBack={clearSelection}
       backLabel={t("common.back")}
       list={<StaffSessionList />}

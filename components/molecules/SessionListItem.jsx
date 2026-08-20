@@ -1,5 +1,5 @@
 import StatusBadge from "@/components/molecules/StatusBadge";
-import { formatRelativeTime } from "@/lib/utils/formatTime";
+import { formatRelativeTime, formatClockTime } from "@/lib/utils/formatTime";
 
 export default function SessionListItem({ session, active = false, onClick, t }) {
   return (
@@ -11,7 +11,9 @@ export default function SessionListItem({ session, active = false, onClick, t })
         active ? "border-zinc-900 bg-zinc-50" : "border-transparent hover:bg-zinc-50"
       }`}
     >
-      <span className="text-sm font-medium text-zinc-900">{session.label}</span>
+      <span className="text-sm font-medium text-zinc-900">
+        {t("staff.sessionLabel", formatClockTime(session.createdAt))}
+      </span>
       <span className="flex items-center justify-between gap-2">
         <StatusBadge status={session.status} connected={session.connected} t={t} />
         <span className="text-xs text-zinc-400">{formatRelativeTime(session.lastUpdated, t)}</span>

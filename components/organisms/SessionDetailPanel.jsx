@@ -5,6 +5,7 @@ import EmptyState from "@/components/molecules/EmptyState";
 import StatusBadge from "@/components/molecules/StatusBadge";
 import { useStaffStore } from "@/lib/store/useStaffStore";
 import { useTranslate } from "@/lib/i18n/useTranslate";
+import { formatClockTime } from "@/lib/utils/formatTime";
 
 const FIELD_KEYS = [
   "firstName",
@@ -35,7 +36,9 @@ export default function SessionDetailPanel() {
   return (
     <div className="space-y-6 p-4 sm:p-6 lg:max-w-3xl">
       <div className="flex items-center justify-between gap-2">
-        <h2 className="text-base font-semibold text-zinc-900">{session.label}</h2>
+        <h2 className="text-base font-semibold text-zinc-900">
+          {t("staff.sessionLabel", formatClockTime(session.createdAt))}
+        </h2>
         <StatusBadge status={session.status} connected={session.connected} t={t} />
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
