@@ -3,7 +3,7 @@
 import SessionDetailField from "@/components/molecules/SessionDetailField";
 import EmptyState from "@/components/molecules/EmptyState";
 import StatusBadge from "@/components/molecules/StatusBadge";
-import UserIcon from "@/app/assets/icons/user-solid-full.svg";
+import UserIcon from "@/assets/icons/user-solid-full.svg";
 import { useStaffStore } from "@/lib/store/useStaffStore";
 import { useTranslate } from "@/lib/i18n/useTranslate";
 import { formatClockTime } from "@/lib/utils/formatTime";

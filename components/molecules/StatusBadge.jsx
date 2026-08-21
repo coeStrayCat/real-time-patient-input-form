@@ -1,6 +1,6 @@
 import Badge from "@/components/atoms/Badge";
 import StatusDot from "@/components/atoms/StatusDot";
-import CheckIcon from "@/app/assets/icons/circle-check-solid-full.svg";
+import CheckIcon from "@/assets/icons/circle-check-solid-full.svg";
 
 const STATUS_CONFIG = {
   active: { key: "status.active", color: "green" },

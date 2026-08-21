@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useTranslate } from "@/lib/i18n/useTranslate";
 import LanguageSwitcher from "@/components/organisms/LanguageSwitcher";
-import PenToSquareIcon from "@/app/assets/icons/pen-to-square-regular-full.svg";
-import DisplayIcon from "@/app/assets/icons/display-solid-full.svg";
+import PenToSquareIcon from "@/assets/icons/pen-to-square-regular-full.svg";
+import DisplayIcon from "@/assets/icons/display-solid-full.svg";
 
 export default function LandingChoice() {
   const t = useTranslate();

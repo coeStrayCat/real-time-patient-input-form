@@ -1,4 +1,4 @@
-import AngleLeftIcon from "@/app/assets/icons/angle-left-solid-full.svg";
+import AngleLeftIcon from "@/assets/icons/angle-left-solid-full.svg";
 
 export default function MobileBackHeader({ onBack, backLabel, children }) {
   return (

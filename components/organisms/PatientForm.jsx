@@ -9,7 +9,7 @@ import Input from "@/components/atoms/Input";
 import Select from "@/components/atoms/Select";
 import TextArea from "@/components/atoms/TextArea";
 import Button from "@/components/atoms/Button";
-import AngleLeftIcon from "@/app/assets/icons/angle-left-solid-full.svg";
+import AngleLeftIcon from "@/assets/icons/angle-left-solid-full.svg";
 import { validatePatientForm } from "@/lib/validation/patientFormSchema";
 import { usePatientStore } from "@/lib/store/usePatientStore";
 import { getSocket } from "@/lib/socket/socketClient";

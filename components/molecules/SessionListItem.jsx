@@ -1,5 +1,5 @@
 import StatusBadge from "@/components/molecules/StatusBadge";
-import UserIcon from "@/app/assets/icons/user-solid-full.svg";
+import UserIcon from "@/assets/icons/user-solid-full.svg";
 import { formatRelativeTime, formatClockTime } from "@/lib/utils/formatTime";
 
 function getDisplayName(fields) {
