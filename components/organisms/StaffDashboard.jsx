@@ -9,7 +9,6 @@ import { useStaffStore } from "@/lib/store/useStaffStore";
 import { getSocket } from "@/lib/socket/socketClient";
 import { EVENTS } from "@/lib/socket/events";
 import { useTranslate } from "@/lib/i18n/useTranslate";
-import { formatClockTime } from "@/lib/utils/formatTime";
 
 export default function StaffDashboard() {
   const t = useTranslate();
@@ -66,7 +65,7 @@ export default function StaffDashboard() {
 
   return (
     <StaffViewLayout
-      header={<StaffViewHeader />}
+      header={<StaffViewHeader hasSelection={Boolean(selectedSession)} />}
       hasSelection={Boolean(selectedSession)}
       onBack={clearSelection}
       backLabel={t("common.back")}

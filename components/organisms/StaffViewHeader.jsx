@@ -6,7 +6,7 @@ import LanguageSwitcher from "@/components/organisms/LanguageSwitcher";
 import { getSocket } from "@/lib/socket/socketClient";
 import AngleLeftIcon from "@/assets/icons/angle-left-solid-full.svg";
 
-export default function StaffViewHeader() {
+export default function StaffViewHeader({ hasSelection = false }) {
   const t = useTranslate();
   const router = useRouter();
 
@@ -21,7 +21,9 @@ export default function StaffViewHeader() {
         <button
           type="button"
           onClick={handleExit}
-          className="flex items-center gap-1 text-sm font-medium text-zinc-600 hover:text-zinc-900"
+          className={`items-center gap-1 text-sm font-medium text-zinc-600 hover:text-zinc-900 md:flex ${
+            hasSelection ? "hidden" : "flex"
+          }`}
         >
           <AngleLeftIcon className="h-3 w-3 fill-current" />
           {t("common.back")}
